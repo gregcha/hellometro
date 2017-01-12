@@ -6,6 +6,7 @@ GEM
     facebook-messenger (0.11.1)
       httparty (~> 0.13, >= 0.13.7)
       rack (>= 1.6.4)
+    haversine (0.3.2)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
     multi_xml (0.6.0)
@@ -28,6 +29,7 @@ PLATFORMS
 
 DEPENDENCIES
   facebook-messenger
+  haversine
   httparty
   rack (~> 1.6.5)
   sinatra
