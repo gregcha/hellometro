@@ -215,7 +215,7 @@ def ratp_schedules(stop_id)
           end
         end
         ratp_schedules_subtitle = ratp_schedules_array.join("\r\n")
-        @ratp_schedules_results << { title: destination['name'], image_url: station['image_url'], subtitle: "#{ratp_schedules_subtitle}", buttons:[ {type: "postback", title: "Actualiser", payload: stop_id}]}
+        @ratp_schedules_results << { title: destination['name'], image_url: station['image_url'], subtitle: "#{ratp_schedules_subtitle}", buttons:[ {type: "postback", title: "Actualiser", payload: stop_id}, {type: "postback", title: "Nouvelle Recherche", payload: "START"}]}
       else
         ratp_schedules_subtitle = "Houston on a un problème sur cette ligne : #{stop_selected['type'].upcase} N°#{station['line']} - #{stop_selected['name']} vers #{destination['name']}. Je suis désolé :("
         @ratp_schedules_results << { title: destination['name'], image_url: station['image_url'], subtitle: ratp_schedules_subtitle}
