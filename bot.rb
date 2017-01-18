@@ -90,7 +90,7 @@ Bot.on :postback do |postback|
           type: "template",
           payload: {
             template_type: "generic",
-            elements: @ratp_trafic_results
+            elements: @ratp_trafic_results[0...9]
           }
         }
       }
@@ -197,7 +197,11 @@ def ratp_schedules(stop_id)
   stop_selected = @ratp['ratp_json'].select {|stop| stop['id'] == stop_id}.first
   stop_selected['stations'].each do |station|
     station['destinations'].each do |destination|
-      ratp_schedules_api = "https://api-ratp.pierre-grimaud.fr/v2/#{stop_selected['type']}/#{station['line']}/stations/#{stop_selected['id']}?destination=#{destination['id']}"
+      if station['id']
+        ratp_schedules_api = "https://api-ratp.pierre-grimaud.fr/v2/#{stop_selected['type']}/#{station['line']}/stations/#{station['id']}?destination=#{destination['id']}"
+      else
+        ratp_schedules_api = "https://api-ratp.pierre-grimaud.fr/v2/#{stop_selected['type']}/#{station['line']}/stations/#{stop_selected['id']}?destination=#{destination['id']}"
+      end
       ratp_schedules_response = HTTParty.get(ratp_schedules_api)
       parsed_ratp_schedules_response = JSON.parse(ratp_schedules_response.body)
       parsed_ratp_schedules_response['response']['code'] != '404' ? parsed_ratp_schedules_response : nil
@@ -208,10 +212,10 @@ def ratp_schedules(stop_id)
         ratp_schedules_next = parsed_ratp_schedules_response['response']['schedules']
         ratp_schedules_array = []
         ratp_schedules_next.each do |schedule|
-          if destination['id'] == "18" || destination['id'] == "32"
-            ratp_schedules_array << "- #{schedule['message']} - #{schedule['destination'].gsub(/['-]/, " ").split.map(&:chr).join}"
+          if ["1", "2", "3", "4", "18", "32"].include? destination['id']
+            ratp_schedules_array << "#{schedule['message']} - #{schedule['destination'].gsub(/['-]/, " ").split.map(&:chr).join}"
           else
-            ratp_schedules_array << "- #{schedule['message']}"
+            ratp_schedules_array << "#{schedule['message']}"
           end
         end
         ratp_schedules_subtitle = ratp_schedules_array.join("\r\n")
@@ -227,17 +231,19 @@ end
 # RATP API for trafic
 def ratp_trafic
   @ratp_trafic_results = []
-  ratp_trafic_api = "https://api-ratp.pierre-grimaud.fr/v2/traffic/metros"
-  ratp_trafic_response = HTTParty.get(ratp_trafic_api)
-  parsed_ratp_trafic_response = JSON.parse(ratp_trafic_response.body)
-  ratp_trafic_array = []
-  parsed_ratp_trafic_response['response']['metros'].each do |line_trafic_status|
-    if line_trafic_status['slug'] != 'normal'
-      ratp_trafic_subtitle = "#{line_trafic_status['message']}"
-      @ratp_trafic_results << { title: line_trafic_status['title'], image_url: "https://raw.githubusercontent.com/gregcha/hellometro/master/images/#{line_trafic_status['line']}.png", subtitle: ratp_trafic_subtitle}
+  ["metro", "rer"].each do |type|
+    ratp_trafic_api = "https://api-ratp.pierre-grimaud.fr/v2/traffic/#{type}s"
+    ratp_trafic_response = HTTParty.get(ratp_trafic_api)
+    parsed_ratp_trafic_response = JSON.parse(ratp_trafic_response.body)
+    ratp_trafic_array = []
+    parsed_ratp_trafic_response['response']["#{type}s"].each do |line_trafic_status|
+      if line_trafic_status['slug'] != 'normal'
+        ratp_trafic_subtitle = "#{line_trafic_status['message']}"
+        @ratp_trafic_results << { title: line_trafic_status['title'], image_url: "https://raw.githubusercontent.com/gregcha/hellometro/master/images/#{line_trafic_status['line']}.png", subtitle: ratp_trafic_subtitle}
+      end
     end
+    @ratp_trafic_results << { title: "Trafic normal", image_url: "https://raw.githubusercontent.com/gregcha/hellometro/master/images/#{type}.png", subtitle: "Trafic normal sur l'ensemble des autres lignes"}
   end
-  @ratp_trafic_results << { title: "Trafic normal", image_url: "https://raw.githubusercontent.com/gregcha/hellometro/master/images/metro.png", subtitle: "Trafic normal sur l'ensemble des autres lignes"}
 end
 
 
