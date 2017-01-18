@@ -231,19 +231,19 @@ end
 # RATP API for trafic
 def ratp_trafic
   @ratp_trafic_results = []
-  ["metro", "rer"].each do |type|
-    ratp_trafic_api = "https://api-ratp.pierre-grimaud.fr/v2/traffic/#{type}s"
+  ["metros", "rers"].each do |type|
+    ratp_trafic_api = "https://api-ratp.pierre-grimaud.fr/v2/traffic/#{type}"
     ratp_trafic_response = HTTParty.get(ratp_trafic_api)
     parsed_ratp_trafic_response = JSON.parse(ratp_trafic_response.body)
     ratp_trafic_array = []
-    parsed_ratp_trafic_response['response']["#{type}s"].each do |line_trafic_status|
+    parsed_ratp_trafic_response['response']["#{type}"].each do |line_trafic_status|
       if line_trafic_status['slug'] != 'normal'
         ratp_trafic_subtitle = "#{line_trafic_status['message']}"
         @ratp_trafic_results << { title: line_trafic_status['title'], image_url: "https://raw.githubusercontent.com/gregcha/hellometro/master/images/#{line_trafic_status['line']}.png", subtitle: ratp_trafic_subtitle}
       end
     end
-    @ratp_trafic_results << { title: "Trafic normal", image_url: "https://raw.githubusercontent.com/gregcha/hellometro/master/images/#{type}.png", subtitle: "Trafic normal sur l'ensemble des autres lignes"}
   end
+  @ratp_trafic_results << { title: "Trafic normal", image_url: "https://raw.githubusercontent.com/gregcha/hellometro/master/images/ratp.png", subtitle: "Trafic normal sur l'ensemble des autres lignes"}
 end
 
 
