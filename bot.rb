@@ -9,13 +9,13 @@ Facebook::Messenger::Subscriptions.subscribe(access_token: ENV["ACCESS_TOKEN"])
 
 # BOT WORDINGS
 TEXT = {
-  greeting: 'Hello {{user_first_name}} 👋 ! Moi c\'est Pierrot du Métro. Mon but ? Te donner les prochains passages du métro de ton choix 🚊. Aller go !',
-  menu_schedules: 'HORAIRES 🚊',
-  menu_trafic: 'INFOS TRAFIC ⚠',
-  ask_location: "Tu peux entrer un lieu à la main ou me partager ta localisation (y)",
+  greeting: "Hello {{user_first_name}} 👋 Moi c\'est Captain Metro 🤖 Je suis là pour te donner les prochains passages du métro de ton choix 🚊 GO !",
+  menu_schedules: 'HORAIRES 🕘',
+  menu_trafic: 'INFOS TRAFIC 🚦',
+  ask_location: "Tu peux entrer un lieu à la main ou me partager ta localisation 📍",
   ask_station: "Voici les 3 stations les plus proches de toi. Laquelle t'intéresse ? 🚊",
-  not_found: "Désolé, je ne connais pas ce lieu :'( Peux-tu préciser ou me partager ta localisation ? 🙏",
-  unknown_command: "Ooops... ça je ne sais pas faire :) Tu peux entrer un lieu ou me partager ta location (y)",
+  not_found: "Désolé, je ne connais pas ce lieu 😱 Peux-tu préciser ou me partager ta localisation ? 🙏",
+  unknown_command: "Ooops... ça je ne sais pas faire 🤐 Tu peux entrer un lieu ou me partager ta location 😇",
 }.freeze
 
 # RATP DB
