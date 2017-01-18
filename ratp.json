@@ -2485,6 +2485,28 @@
       ]
     },
     {
+      "id": "11361",
+      "name": "Mairie de Montrouge",
+      "coord":[48.8180648291392,2.31953674036336],
+      "type" : "metros",
+      "stations": [
+        {
+          "line": "4",
+          "image_url" : "https://raw.githubusercontent.com/gregcha/hellometro/master/images/4.png",
+          "destinations": [
+            {
+              "id": "13",
+              "name": "Mairie de Montrouge"
+            },
+            {
+              "id": "14",
+              "name": "Porte de Clignancourt"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "156",
       "name": "Marcadet - Poissonniers",
       "coord":[48.8908769929214, 2.34983707163005],
