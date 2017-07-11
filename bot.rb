@@ -187,8 +187,7 @@ end
 # Geocoding API
 def google_locate_user(query)
   google_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
-  #google_response = HTTParty.get(google_url + query + ENV["GOOGLE_API_TOKEN"])
-  google_response = HTTParty.get(google_url + query + "&key=AIzaSyDeKBASnB_loQz0Xaj43eghhjuPJnyjjvU")
+  google_response = HTTParty.get(google_url + query + ENV["GOOGLE_API_TOKEN"])
   parsed_google_response = JSON.parse(google_response.body)
 end
 
