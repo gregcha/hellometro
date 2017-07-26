@@ -14,7 +14,7 @@ TEXT = {
   menu_trafic: 'INFOS TRAFIC ⚠',
   ask_location: "Tu peux entrer un lieu à la main 🤘 Ou me partager ta localisation 📍",
   ask_stop: "Voici les 3 stations les plus proches de toi. Laquelle t'intéresse ? 🚊",
-  not_found: "Arf, essaye d'ajouter \"Paris\" après ta requête cela devrait m'aider 🙌",
+  not_found: "Arf, essaye d'être plus précis car je n'arrive pas à localiser ce lieu 🙌",
   unknown_command: "Désolé, je suis pas très intelligent 😬 Ce que t'écris, je l'envoie directement à Google pour savoir où tu es. Tu peux donc me partager un lieu ou ta localisation 🚩",
 }.freeze
 
@@ -147,8 +147,11 @@ Bot.on :message do |message|
     query = message.text.to_ascii
     parsed_google_response = google_locate_user(query)
     if parsed_google_response['status'] == 'OK'
-      p parsed_google_response
       location = parsed_google_response['results'].first['geometry']['location']
+      if Haversine.distance([location['lat'],location['lng']],[48.8587741,2.2074741]).to_km > 60
+        parsed_google_response = google_locate_user(query + " paris")
+        location = parsed_google_response['results'].first['geometry']['location']
+      end
       if Haversine.distance([location['lat'],location['lng']],[48.8587741,2.2074741]).to_km < 60
         ratp_closest_stops([location['lat'],location['lng']])
         message.reply(
